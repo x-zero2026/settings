@@ -275,3 +275,134 @@
     width: 100%;
   }
 }
+
+/* Selected tags display */
+.selected-tags {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: rgba(102, 126, 234, 0.1);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  border-radius: 8px;
+}
+
+.selected-tags .tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.selected-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+}
+
+.selected-tag.predefined {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: 1px solid rgba(102, 126, 234, 0.5);
+}
+
+.selected-tag.custom {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  border: 1px solid rgba(240, 147, 251, 0.5);
+}
+
+.selected-tag .tag-text {
+  font-weight: 500;
+}
+
+.remove-tag-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  line-height: 1;
+  transition: all 0.2s;
+  padding: 0;
+}
+
+.remove-tag-btn:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(1.1);
+}
+
+/* Custom tag section */
+.custom-tag-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: rgba(240, 147, 251, 0.05);
+  border: 1px solid rgba(240, 147, 251, 0.2);
+  border-radius: 8px;
+}
+
+.custom-tag-input-group {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.custom-tag-input {
+  flex: 1;
+}
+
+.add-tag-btn {
+  white-space: nowrap;
+  padding: 0.75rem 1.5rem;
+}
+
+.help-text {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* Predefined tags section */
+.predefined-tags-section {
+  margin-top: 2rem;
+}
+
+.predefined-tags-section .category-title {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.category-subtitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .custom-tag-input-group {
+    flex-direction: column;
+  }
+
+  .add-tag-btn {
+    width: 100%;
+  }
+
+  .selected-tags .tag-list {
+    gap: 0.5rem;
+  }
+
+  .selected-tag {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.6rem;
+  }
+}

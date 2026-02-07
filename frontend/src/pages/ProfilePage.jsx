@@ -13,6 +13,8 @@ function ProfilePage() {
     bio: '',
     profession_tags: [],
   });
+  
+  const [customTag, setCustomTag] = useState('');
 
   useEffect(() => {
     loadProfile();
@@ -61,6 +63,54 @@ function ProfilePage() {
         });
       }
     }
+  };
+
+  const handleAddCustomTag = (e) => {
+    e.preventDefault();
+    const trimmedTag = customTag.trim();
+    
+    if (!trimmedTag) {
+      return;
+    }
+    
+    // Check if already exists
+    if (formData.profession_tags.includes(trimmedTag)) {
+      setError('该标签已存在');
+      setTimeout(() => setError(null), 2000);
+      return;
+    }
+    
+    // Check max limit
+    if (formData.profession_tags.length >= 5) {
+      setError('最多只能添加 5 个标签');
+      setTimeout(() => setError(null), 2000);
+      return;
+    }
+    
+    // Check tag length
+    if (trimmedTag.length > 50) {
+      setError('标签长度不能超过 50 个字符');
+      setTimeout(() => setError(null), 2000);
+      return;
+    }
+    
+    // Add custom tag
+    setFormData({
+      ...formData,
+      profession_tags: [...formData.profession_tags, trimmedTag],
+    });
+    setCustomTag('');
+  };
+
+  const handleRemoveTag = (tag) => {
+    setFormData({
+      ...formData,
+      profession_tags: formData.profession_tags.filter(t => t !== tag),
+    });
+  };
+
+  const isPreDefinedTag = (tag) => {
+    return Object.keys(PROFESSION_TAGS).includes(tag);
   };
 
   const handleSubmit = async (e) => {
@@ -164,30 +214,90 @@ function ProfilePage() {
           <div className="form-section">
             <h2 className="section-title">职业标签</h2>
             <p className="section-description">
-              选择最多 5 个标签 ({formData.profession_tags.length}/5)
+              选择或添加最多 5 个标签 ({formData.profession_tags.length}/5)
             </p>
 
-            {Object.entries(PROFESSION_TAG_CATEGORIES).map(([category, tags]) => (
-              <div key={category} className="tag-category">
-                <h3 className="category-title">{category}</h3>
+            {/* Selected tags display */}
+            {formData.profession_tags.length > 0 && (
+              <div className="selected-tags">
+                <h3 className="category-title">已选标签</h3>
                 <div className="tag-list">
-                  {tags.map((tag) => (
-                    <label key={tag} className="tag-item">
-                      <input
-                        type="checkbox"
-                        checked={formData.profession_tags.includes(tag)}
-                        onChange={() => handleTagToggle(tag)}
-                        disabled={
-                          !formData.profession_tags.includes(tag) &&
-                          formData.profession_tags.length >= 5
-                        }
-                      />
-                      <span className="tag-label">{PROFESSION_TAGS[tag]}</span>
-                    </label>
+                  {formData.profession_tags.map((tag) => (
+                    <div key={tag} className={`selected-tag ${isPreDefinedTag(tag) ? 'predefined' : 'custom'}`}>
+                      <span className="tag-text">
+                        {isPreDefinedTag(tag) ? PROFESSION_TAGS[tag] : tag}
+                      </span>
+                      <button
+                        type="button"
+                        className="remove-tag-btn"
+                        onClick={() => handleRemoveTag(tag)}
+                        title="移除标签"
+                      >
+                        ×
+                      </button>
+                    </div>
                   ))}
                 </div>
               </div>
-            ))}
+            )}
+
+            {/* Add custom tag */}
+            <div className="custom-tag-section">
+              <h3 className="category-title">添加自定义标签</h3>
+              <div className="custom-tag-input-group">
+                <input
+                  type="text"
+                  className="form-input custom-tag-input"
+                  value={customTag}
+                  onChange={(e) => setCustomTag(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      handleAddCustomTag(e);
+                    }
+                  }}
+                  placeholder="输入自定义标签，如：客服专员、运营经理..."
+                  maxLength={50}
+                  disabled={formData.profession_tags.length >= 5}
+                />
+                <button
+                  type="button"
+                  className="btn btn-secondary add-tag-btn"
+                  onClick={handleAddCustomTag}
+                  disabled={!customTag.trim() || formData.profession_tags.length >= 5}
+                >
+                  添加
+                </button>
+              </div>
+              <p className="help-text">
+                💡 提示：可以添加任何职业标签，如客服、运营、销售等
+              </p>
+            </div>
+
+            {/* Predefined tags */}
+            <div className="predefined-tags-section">
+              <h3 className="category-title">预定义标签（点击快速添加）</h3>
+              {Object.entries(PROFESSION_TAG_CATEGORIES).map(([category, tags]) => (
+                <div key={category} className="tag-category">
+                  <h4 className="category-subtitle">{category}</h4>
+                  <div className="tag-list">
+                    {tags.map((tag) => (
+                      <label key={tag} className="tag-item">
+                        <input
+                          type="checkbox"
+                          checked={formData.profession_tags.includes(tag)}
+                          onChange={() => handleTagToggle(tag)}
+                          disabled={
+                            !formData.profession_tags.includes(tag) &&
+                            formData.profession_tags.length >= 5
+                          }
+                        />
+                        <span className="tag-label">{PROFESSION_TAGS[tag]}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="form-actions">

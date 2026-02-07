@@ -67,7 +67,7 @@ settings/
 
 用户可以更新以下资料：
 - **个人简介**：个人介绍（最多 500 字符）
-- **职业标签**：从预定义列表中选择最多 5 个标签
+- **职业标签**：从预定义列表中选择或添加自定义标签（最多 5 个，每个标签最多 50 字符）
 
 **预定义职业标签**（共 23 个）：
 
@@ -87,6 +87,11 @@ settings/
 
 **其他** (3 个):
 - researcher（研究员）, writer（作家）, marketer（市场营销）
+
+**自定义标签**：
+- 用户可以添加任何自定义职业标签，如：客服专员、运营经理、销售总监等
+- 自定义标签与预定义标签共享 5 个标签的限制
+- 自定义标签在界面上以不同颜色显示（粉色渐变）
 
 ### 2. 项目管理（仅管理员）
 
@@ -128,7 +133,11 @@ CREATE INDEX IF NOT EXISTS idx_users_profession_tags ON users USING GIN(professi
 **PATCH /api/user/profile**
 - 更新用户资料
 - 请求体：`{ "bio": "string", "profession_tags": ["tag1", "tag2"] }`
-- 验证：bio ≤ 500 字符，profession_tags ≤ 5 个
+- 验证：
+  - bio ≤ 500 字符
+  - profession_tags ≤ 5 个
+  - 每个标签 ≤ 50 字符
+  - 标签可以是预定义标签或自定义标签
 
 **GET /api/users/search?q=query**
 - 通过用户名或邮箱搜索用户
