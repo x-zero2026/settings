@@ -1,0 +1,6 @@
+# Amplify ignore file
+node_modules/
+.git/
+.env.local
+.DS_Store
+*.log
